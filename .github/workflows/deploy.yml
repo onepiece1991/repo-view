@@ -9,7 +9,7 @@ jobs:
   # 任务ID
   build-and-deploy:
     # 运行环境
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     # 步骤
     steps:
       # 官方action，将代码拉取到虚拟机
@@ -23,7 +23,7 @@ jobs:
 
       - name: Install rsync
         run: |
-          apt-get update && apt-get install -y rsync
+          npm update && npm install -y rsync
 
       - name: Deploy   # 部署
         uses: JamesIves/github-pages-deploy-action@v4
