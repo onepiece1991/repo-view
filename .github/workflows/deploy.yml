@@ -21,11 +21,11 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: site
-          path: build
+          path: dist
 
   deploy:
     concurrency: ci-${{ github.ref }}
-    needs: [build] # The second job must depend on the first one to complete before running and uses ubuntu-latest instead of windows.
+    needs: [dist] # The second job must depend on the first one to complete before running and uses ubuntu-latest instead of windows.
     runs-on: windows-latest
     steps:
       - name: Checkout 🛎️
@@ -39,4 +39,5 @@ jobs:
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: 'site'
+          folder: 'site',
+          branch: gh-pages
