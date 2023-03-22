@@ -25,7 +25,7 @@ jobs:
 
   deploy:
     concurrency: ci-${{ github.ref }}
-    needs: [dist] # The second job must depend on the first one to complete before running and uses ubuntu-latest instead of windows.
+    needs: [build] # The second job must depend on the first one to complete before running and uses ubuntu-latest instead of windows.
     runs-on: windows-latest
     steps:
       - name: Checkout
@@ -40,4 +40,3 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: 'site'
-          branch: gh-pages
