@@ -20,8 +20,9 @@ jobs:
       - name: Upload Artifacts # The project is then uploaded as an artifact named 'site'.
         uses: actions/upload-artifact@v1
         with:
-          name: dist
-          path: build
+          name: site
+          path: dist
+          branch: gh-pages
 
   deploy:
     concurrency: ci-${{ github.ref }}
@@ -31,12 +32,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Download Artifacts  # The built project is downloaded into the 'site' folder.
+      - name: Download Artifacts # The built project is downloaded into the 'site' folder.
         uses: actions/download-artifact@v1
         with:
-          name: dist
+          name: site
 
-      - name: Deploy 🚀
+      - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: 'dist'
+          folder: 'site'
