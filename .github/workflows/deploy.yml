@@ -26,7 +26,7 @@ jobs:
   deploy:
     concurrency: ci-${{ github.ref }}
     needs: [build] # The second job must depend on the first one to complete before running and uses ubuntu-latest instead of windows.
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
