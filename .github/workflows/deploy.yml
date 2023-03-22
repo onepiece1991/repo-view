@@ -6,28 +6,37 @@ on:
      # 配置分支
       - main
 jobs:
-  # 任务ID
-  build-and-deploy:
-    # 运行环境
-    runs-on: windows-latest
-    # 步骤
+  build:
+    runs-on: windows-latest # The first job utilizes windows-latest
     steps:
-      # 官方action，将代码拉取到虚拟机
-      - name: Checkout  ️ 
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Build   # 安装依赖、打包，如果提前已打包好无需这一步
+      - name: Install and Build  # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
         run: |
           npm install
           npm run build
 
-      - name: Install rsync
-        run: |
-          npm update
-          npm install -s rsync
+      - name: Upload Artifacts # The project is then uploaded as an artifact named 'site'.
+        uses: actions/upload-artifact@v1
+        with:
+          name: dist
+          path: build
 
-      - name: Deploy   # 部署
+  deploy:
+    concurrency: ci-${{ github.ref }}
+    needs: [dist] # The second job must depend on the first one to complete before running and uses ubuntu-latest instead of windows.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download Artifacts  # The built project is downloaded into the 'site' folder.
+        uses: actions/download-artifact@v1
+        with:
+          name: dist
+
+      - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages # 部署后提交到那个分支
-          folder: dist # 这里填打包好的目录名称
+          folder: 'dist'
